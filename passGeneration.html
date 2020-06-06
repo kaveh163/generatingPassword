@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            border-style: dashed;
+            height: 10rem;
+            position: relative;
+        }
+
+        .center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: gray;
+        }
+
+        .round {
+            border-radius: 12px;
+        }
+    </style>
+    <link rel="stylesheet" href="dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<section class="container-fluid m-5">
+    <section class="content">
+        <section class="row">
+            <section class="offset-2 col-8">
+                <section>
+                    <h2 class="text-capitalize text-center">password generator</h2>
+                    <hr>
+                    <div class="container border-secondary bg-white">
+                        <div class="text-center center"><h3 class="pass"></h3></div>
+                    </div>
+                    <hr>
+                    <a href="" onclick="Start()" class="btn btn-success btn-block rounded-pill lead text-capitalize">Submit
+                        to generate
+                        Password</a>
+                </section>
+
+            </section>
+        </section>
+    </section>
+
+</section>
+<script src="dist/js/jquery-3.3.1.min.js"></script>
+<script src="dist/js/popper.min.js"></script>
+<script src="dist/js/bootstrap.min.js"></script>
+<script>
+
+    // button click
+    function Start() {
+        var charNum = getCharNum();
+        if (charNum == null) {
+            alert('password length not in the limit');
+        } else {
+            var makeupPass = passCriteria();
+            if (makeupPass == null) {
+                alert('One character type should be selected')
+            } else {
+                var generatedPass = genPass(charNum, makeupPass);
+                printPass(generatedPass);
+            }
+        }
+    }
+
+    // get password character length
+    function getCharNum() {
+        var i;
+        i = prompt("Please enter length of password: at least 8 characters and no more than 128 characters");
+        i = parseInt(i);
+        if ((i >= 8) && (i < 128)) {
+            return i;
+        } else {
+            return null;
+        }
+
+    }
+    // Password character type
+    function passCriteria() {
+        var str = "";
+        var lowercase = confirm("Password to include lowercase");
+        var uppercase = confirm("Password to include uppercase");
+        var numeric = confirm("Password to include numeric");
+        var specialChar = confirm("Password to include specialChar");
+        if (!lowercase && !uppercase && !numeric && !specialChar) {
+            return null;
+        } else {
+            var criteriaArray = [lowercase, uppercase, numeric, specialChar];
+            criteriaArray.forEach(function (item, index) {
+                if (item && (index == 0)) {
+                    str += 'abcdefghijklmnopqrstuvwxyz';
+                }
+                if (item && (index == 1)) {
+                    str += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                }
+                if (item && (index == 2)) {
+                    str += '0123456789';
+                }
+                if (item && (index == 3)) {
+                    str += '@#$';
+                }
+            });
+        }
+
+        // console.log(str);
+        return str;
+    }
+    // generating password
+    function genPass(charNum, makeupPass) {
+        var pass = "";
+        console.log(charNum, makeupPass);
+        for (var i = 0; i < charNum; i++) {
+            var char = Math.floor((Math.random() * makeupPass.length));
+            pass += makeupPass.charAt(char);
+        }
+        return pass;
+    }
+    // printing password
+    function printPass(generatedPass) {
+        document.querySelector('.pass').innerHTML += generatedPass;
+    }
+</script>
+</body>
+</html>
